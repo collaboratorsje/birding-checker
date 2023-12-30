@@ -1,5 +1,8 @@
 {
   "projects": {
-    "default": "birding-checker"
-  }
+    "default": "birding-checker",
+    "birding-checker": "birding-checker"
+  },
+  "targets": {},
+  "etags": {}
 }
