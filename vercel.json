@@ -1,17 +1,13 @@
 {
     "builds": [
       {
-        "src": "public/*",
-        "use": "@vercel/node"
-      },
-      {
-        "src": "api/*",
-        "use": "@vercel/node"
+        "src": "package.json",
+        "use": "@now/next"
       }
     ],
     "routes": [
-      { "src": "/(.*)", "dest": "/$1" }
+      { "src": "/(.*)", "dest": "/.next/$1" }
     ]
-  }
+  }  
   
   
