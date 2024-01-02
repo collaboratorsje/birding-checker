@@ -1,13 +1,4 @@
 {
-    "builds": [
-      {
-        "src": "package.json",
-        "use": "@now/next"
-      }
-    ],
-    "routes": [
-      { "src": "/(.*)", "dest": "/.next/$1" }
-    ]
   }  
   
   
