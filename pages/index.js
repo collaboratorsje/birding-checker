@@ -83,7 +83,8 @@ export default function Home({ birds }) {
 export async function getServerSideProps() {
   try {
     const { db } = await connectToDatabase();
-    const birds = await db.collection('birds').find({}).toArray();
+    // Sort the birds by common_name in alphabetical order
+    const birds = await db.collection('birds').find({}).sort({ common_name: 1 }).toArray();
     return {
       props: {
         birds: JSON.parse(JSON.stringify(birds)),
