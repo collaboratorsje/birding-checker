@@ -24,14 +24,18 @@ export default function Nav() {
       </Link>
 
       <h1 className="title absolute left-1/2 transform -translate-x-1/2 text-4xl font-bold text-brown">
-        <Image
-          src="/bird-checker.png"
-          alt="bird checker"
-          width={280}
-          height={90}
-          layout="intrinsic"
-          className="hover:opacity-80 cursor-pointer"
-        />
+        <Link href="/leaderboard" passHref>
+          <a>
+            <Image
+              src="/bird-checker.png"
+              alt="bird checker"
+              width={280}
+              height={90}
+              layout="intrinsic"
+              className="hover:opacity-80 cursor-pointer"
+            />
+          </a>
+        </Link>
       </h1>
 
       <ul className="flex items-center gap-10">
