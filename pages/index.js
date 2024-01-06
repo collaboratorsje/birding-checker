@@ -6,13 +6,20 @@ import { markBirdAsSeen, unmarkBirdAsSeen } from '../utils/firestoreFunctions';
 import { auth, db } from '../utils/firebase';
 import { doc, getDoc } from "firebase/firestore";
 import SearchBar from '../components/searchBar';
+import { useRouter } from 'next/router';
 
 export default function Home({ birds }) {
+  const router = useRouter();
   const [seenBirds, setSeenBirds] = useState(new Set());
   const [filteredBirds, setFilteredBirds] = useState(birds);
   const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
+    if (router.pathname === '/') {
+    // Add the 'homepageBody' class to the body tag
+    console.log('Adding homepageBody class');
+    document.body.classList.add('homepageBody');
+    }
     const unsubscribe = auth.onAuthStateChanged(async (user) => {
       if (user) {
         const userDocRef = doc(db, "users", user.uid);
@@ -31,8 +38,13 @@ export default function Home({ birds }) {
     );
     setFilteredBirds(filtered);
 
-    return () => unsubscribe();
-  }, [searchQuery, birds]);
+    // Clean up function to remove the class when the component unmounts
+    return () => {
+      console.log('Removing homepageBody class');
+      document.body.classList.remove('homepageBody');
+      unsubscribe();
+    };
+  }, [router.pathname, searchQuery, birds]);
 
   const handleSearch = (query) => {
     setSearchQuery(query);

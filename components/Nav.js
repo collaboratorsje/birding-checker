@@ -33,6 +33,7 @@ export default function Nav() {
               height={90}
               layout="intrinsic"
               className="hover:opacity-80 cursor-pointer"
+              priority // Current priority
             />
           </a>
         </Link>
@@ -50,13 +51,14 @@ export default function Nav() {
           <div className="flex items-center">
             <Link href="/dashboard">
               <a>
-                <img
+                <Image
                   referrerPolicy="no-referrer"
                   src={user.photoURL}
                   alt="User Photo"
                   height={50}
                   width={50}
                   className="rounded-full mr-2"
+                  layout="fixed"
                 />
               </a>
             </Link>
