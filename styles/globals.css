@@ -15,7 +15,7 @@ body {
   background-repeat: repeat;
   background-size: auto;
 }
-
+/* FIXME: Make the sizes use % or vh units for mobile compatibility */
 body.homepageBody {
   height: 761%
 }
