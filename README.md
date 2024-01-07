@@ -1,4 +1,8 @@
-This is a birding-checker site made to check off birds you've seen while birding. This ReadMe is not yet complete.
+This is a birding-checker site made to check off birds you've seen while birding. 
+The site is live, feel free to log in with google and start using it to check off birds.
+https://birding-checker.vercel.app
+
+This ReadMe is not yet complete.
 
 Here is information from nextjs:
 
