@@ -9,37 +9,43 @@ export default function Nav() {
   const [user, loading] = useAuthState(auth);
 
   return (
-    <nav className="relative flex justify-between items-center py-10">
-      <Link href="/" passHref>
-        <a title="Home">
-          <Image
-            src="/bird_samr.png"
-            alt="birdsamr"
-            width={80}
-            height={80}
-            layout="intrinsic"
-            className="hover:opacity-80 cursor-pointer"
-          />
-        </a>
-      </Link>
-
-      <h1 className="title absolute left-1/2 transform -translate-x-1/2 text-4xl font-bold text-brown">
-        <Link href="/leaderboard" passHref>
-          <a>
+    <nav className="flex justify-between items-center py-10">
+      {/* Left-aligned items container */}
+      <div className="flex items-center">
+        {/* Home link with bird image */}
+        <Link href="/" passHref>
+          <a title="Home" className="hover:opacity-80 cursor-pointer">
             <Image
-              src="/bird-checker.png"
-              alt="bird checker"
-              width={280}
-              height={90}
-              layout="intrinsic"
-              className="hover:opacity-80 cursor-pointer"
-              priority // Current priority
+              src="/bird_samr.png"
+              alt="birdsamr"
+              width={60}
+              height={60}
+              layout="fixed"
             />
           </a>
         </Link>
-      </h1>
+      </div>
 
-      <ul className="flex items-center gap-10">
+      {/* Center-aligned item - bird checker image */}
+      {/* The margin-auto on the left and right will push the element to the center */}
+      <div className="mx-auto">
+        <Link href="/leaderboard" passHref>
+          <a className="hover:opacity-80 cursor-pointer">
+            <Image
+              src="/bird-checker.png"
+              alt="bird checker"
+              width={202}
+              height={65}
+              layout="intrinsic"
+              priority // This ensures the image is preloaded
+            />
+          </a>
+        </Link>
+      </div>
+
+      {/* Right-aligned items container */}
+      <div className="flex items-center">
+        {/* Conditionally rendered login/join now button or user image */}
         {!user && (
           <Link href="/auth/login">
             <a className="py-2 px-4 text-lg bg-teal-500 text-white rounded-lg font-medium ml-8">
@@ -48,24 +54,24 @@ export default function Nav() {
           </Link>
         )}
         {user && (
-          <div className="flex items-center">
+          <>
             <Link href="/dashboard">
-              <a>
+              <a className="hover:opacity-80 cursor-pointer">
                 <Image
                   referrerPolicy="no-referrer"
                   src={user.photoURL}
                   alt="User Photo"
-                  height={50}
-                  width={50}
-                  className="rounded-full mr-2"
+                  width={40}
+                  height={40}
                   layout="fixed"
+                  className="rounded-full"
                 />
               </a>
             </Link>
             <SignOutButton />
-          </div>
+          </>
         )}
-      </ul>
+      </div>
     </nav>
   );
 }

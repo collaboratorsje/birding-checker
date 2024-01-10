@@ -113,7 +113,7 @@ a {
 .sign-out-button {
   background-color: #f44336; /* Button background color */
   color: white; /* Text color */
-  padding: 5px 10px; /* Reduced padding to make it smaller */
+  padding: 2px 4px; /* Reduced padding to make it smaller */
   border: none;
   cursor: pointer;
   border-radius: 5px; /* Rounded corners */
