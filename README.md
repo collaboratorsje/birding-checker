@@ -2,8 +2,6 @@ This is a birding-checker site made to check off birds you've seen while birding
 The site is live, feel free to log in with google and start using it to check off birds.
 https://birding-checker.vercel.app
 
-This ReadMe is not yet complete.
-
 Here is information from nextjs:
 
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
