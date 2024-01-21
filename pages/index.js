@@ -4,7 +4,7 @@ import { connectToDatabase } from '../utils/mongodb';
 import { markBirdAsSeen, unmarkBirdAsSeen } from '../utils/firestoreFunctions';
 import { auth, db } from '../utils/firebase';
 import { doc, getDoc } from "firebase/firestore";
-import SearchBar from '../components/SearchBar';
+import SearchBar from '../components/searchBar';
 import { useRouter } from 'next/router';
 
 export default function Home({ birds }) {
