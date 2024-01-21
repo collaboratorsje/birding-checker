@@ -124,6 +124,11 @@ a {
   background-color: #d32f2f; /* Hover color */
 }
 
+#birdCountContainer {
+  margin-bottom: 0.5rem; /* Match the margin-bottom of listGroupItem if needed */
+}
+
+
 
 
 

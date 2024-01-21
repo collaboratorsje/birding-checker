@@ -1,11 +1,10 @@
-// pages/index.js
 import React, { useState, useEffect } from 'react';
 import Head from 'next/head';
 import { connectToDatabase } from '../utils/mongodb';
 import { markBirdAsSeen, unmarkBirdAsSeen } from '../utils/firestoreFunctions';
 import { auth, db } from '../utils/firebase';
 import { doc, getDoc } from "firebase/firestore";
-import SearchBar from '../components/searchBar';
+import SearchBar from '../components/SearchBar';
 import { useRouter } from 'next/router';
 
 export default function Home({ birds }) {
@@ -16,9 +15,8 @@ export default function Home({ birds }) {
 
   useEffect(() => {
     if (router.pathname === '/') {
-    // Add the 'homepageBody' class to the body tag
-    console.log('Adding homepageBody class');
-    document.body.classList.add('homepageBody');
+      console.log('Adding homepageBody class');
+      document.body.classList.add('homepageBody');
     }
     const unsubscribe = auth.onAuthStateChanged(async (user) => {
       if (user) {
@@ -26,39 +24,46 @@ export default function Home({ birds }) {
         const docSnap = await getDoc(userDocRef);
         if (docSnap.exists()) {
           const userData = docSnap.data();
-          setSeenBirds(new Set(userData.seenBirds || []));
+          // Adjust to handle the object structure for seenBirds
+          setSeenBirds(new Set(userData.seenBirds.map(bird => ({ ...bird }))));
         }
       }
     });
 
+    return () => {
+      console.log('Removing homepageBody class');
+      document.body.classList.remove('homepageBody');
+      unsubscribe();
+    };
+  }, [router.pathname]);
+
+  useEffect(() => {
     const lowercasedQuery = searchQuery.toLowerCase();
     const filtered = birds.filter((bird) =>
       bird.common_name.toLowerCase().includes(lowercasedQuery) ||
       bird.scientific_name.toLowerCase().includes(lowercasedQuery)
     );
     setFilteredBirds(filtered);
-
-    // Clean up function to remove the class when the component unmounts
-    return () => {
-      console.log('Removing homepageBody class');
-      document.body.classList.remove('homepageBody');
-      unsubscribe();
-    };
-  }, [router.pathname, searchQuery, birds]);
+  }, [searchQuery, birds]);
 
   const handleSearch = (query) => {
     setSearchQuery(query);
   };
 
-  const handleCheckboxChange = async (birdId) => {
+  const handleCheckboxChange = async (bird) => {
     const user = auth.currentUser;
     if (user) {
-      if (seenBirds.has(birdId)) {
-        await unmarkBirdAsSeen(user.uid, birdId);
-        setSeenBirds(prevSeenBirds => new Set([...prevSeenBirds].filter(id => id !== birdId)));
+      const isSeen = Array.from(seenBirds).some(seenBird => seenBird.id === bird._id);
+      if (isSeen) {
+        await unmarkBirdAsSeen(user.uid, bird._id);
+        setSeenBirds(prevSeenBirds => new Set([...prevSeenBirds].filter(b => b.id !== bird._id)));
       } else {
-        await markBirdAsSeen(user.uid, birdId);
-        setSeenBirds(new Set([...seenBirds, birdId]));
+        await markBirdAsSeen(user.uid, bird._id, bird.common_name, bird.scientific_name);
+        setSeenBirds(prevSeenBirds => new Set([...prevSeenBirds, {
+          id: bird._id, 
+          common_name: bird.common_name, 
+          scientific_name: bird.scientific_name
+        }]));
       }
     }
   };
@@ -74,14 +79,14 @@ export default function Home({ birds }) {
       <h1>Birds</h1>
       <ul className="list-group">
         {filteredBirds.map((bird) => (
-          <li key={bird._id} className={`listGroupItem ${seenBirds.has(bird._id) ? 'seenBird' : ''}`}>
+          <li key={bird._id} className={`listGroupItem ${Array.from(seenBirds).some(seenBird => seenBird.id === bird._id) ? 'seenBird' : ''}`}>
             <span>{bird.common_name}</span> - <span className="scientificName">{bird.scientific_name}</span>
             <div className="customCheckbox">
               <input
                 type="checkbox"
                 id={`checkbox-${bird._id}`}
-                checked={seenBirds.has(bird._id)}
-                onChange={() => handleCheckboxChange(bird._id)}
+                checked={Array.from(seenBirds).some(seenBird => seenBird.id === bird._id)}
+                onChange={() => handleCheckboxChange(bird)}
               />
               <label htmlFor={`checkbox-${bird._id}`}></label>
             </div>
@@ -95,7 +100,6 @@ export default function Home({ birds }) {
 export async function getServerSideProps() {
   try {
     const { db } = await connectToDatabase();
-    // Sort the birds by common_name in alphabetical order
     const birds = await db.collection('birds').find({}).sort({ common_name: 1 }).toArray();
     return {
       props: {

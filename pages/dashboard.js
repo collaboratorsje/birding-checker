@@ -29,7 +29,7 @@ export default function Dashboard() {
     });
   };
 
-  if (loading) return <h1>Loading</h1>;
+  if (loading) return <h1>Loading...</h1>;
   if (!user) {
     route.push("/auth/login");
     return null;
@@ -41,16 +41,21 @@ export default function Dashboard() {
       <div id="birdCountContainer">
         <h3>Bird Species Seen: {seenBirds.length}</h3>
       </div>
-      <ul className="list-group">
-        {seenBirds.map((birdId, index) => (
-          <li key={index} className="list-group-item">
-            {birdId} {/* You might want to replace birdId with the bird's common name if you have it */}
+      <ul>
+        {seenBirds.map((bird, index) => (
+          <li key={index} className={`listGroupItem ${bird.id ? 'seenBird' : ''}`}>
+            <span>{bird.common_name}</span> - <span className="scientificName">{bird.scientific_name}</span>
+            {/* Removed checkbox for non-interactive display */}
           </li>
         ))}
       </ul>
     </div>
   );
 }
+
+
+
+
 
 
 
